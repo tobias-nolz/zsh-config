@@ -1,25 +1,36 @@
 git config --global core.autocrlf false
 git config --global core.eol lf
 
-git fetch origin
-git reset --hard origin/master
+#Install ZSH
+echo -e "\n--------------------\nzsh installation\n--------------------"
+sudo apt update && sudp apt install zsh ruby-full
+echo "zsh installation done"
 
-#Oh my Zsh
-rm -rf /home/main/.oh-my-zsh
+#Cleanup
+echo -e "\n--------------------\nCleanup\n--------------------"
+sudo rm -rf $HOME/.oh-my-zsh
+echo "cleanup done"
+
+echo -e "\n--------------------\nOh My ZSH\n--------------------"
+#Oh My ZSH
 sh -c "$(curl -fsSL https://raw.github.com/robbyrussell/oh-my-zsh/master/tools/install.sh)"
+echo "oh my zsh done"
 
+echo -e "\n--------------------\nPlugins\n--------------------"
 #PowerLevel10K
-sudo git clone https://github.com/romkatv/powerlevel10k.git $ZSH_CUSTOM/themes/powerlevel10k
+git clone https://github.com/romkatv/powerlevel10k.git $HOME/.oh-my-zsh/themes/powerlevel10k
 
 #Zsh Syntax Highlighting
-sudo git clone https://github.com/zsh-users/zsh-syntax-highlighting.git ${ZSH_CUSTOM:-~/.oh-my-zsh/custom}/plugins/zsh-syntax-highlighting
+git clone https://github.com/zsh-users/zsh-syntax-highlighting.git $HOME/.oh-my-zsh/plugins/zsh-syntax-highlighting
 
 #Zsh suggestions
-sudo git clone https://github.com/zsh-users/zsh-autosuggestions ${ZSH_CUSTOM:-~/.oh-my-zsh/custom}/plugins/zsh-autosuggestions
+git clone https://github.com/zsh-users/zsh-autosuggestions $HOME/.oh-my-zsh/plugins/zsh-autosuggestions
 
-sudo apt update && sudo apt install ruby-full
 sudo gem install colorls
+echo "plugins done"
 
+echo -e "\n--------------------\nCopy config\n--------------------"
 cp .zshrc ~/.zshrc
 cp .vimrc ~/.vimrc
 cp .p10k.zsh ~/.p10k.zsh
+echo "copy config done"
