@@ -1,8 +1,8 @@
 git config --global core.autocrlf false
 git config --global core.eol lf
 
-#git fetch origin
-#git reset --hard origin/master
+git fetch origin
+git reset --hard origin/master
 
 #Oh my Zsh
 rm -rf /home/main/.oh-my-zsh
