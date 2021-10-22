@@ -3,7 +3,7 @@ git config --global core.eol lf
 
 #Install ZSH
 echo -e "\n--------------------\nzsh installation\n--------------------"
-sudo apt update && sudp apt install zsh ruby-full
+sudo apt update && sudo apt install zsh vim ruby-full
 echo "zsh installation done"
 
 #Cleanup
