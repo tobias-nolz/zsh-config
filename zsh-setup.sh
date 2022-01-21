@@ -30,7 +30,6 @@ sudo gem install colorls
 echo "plugins done"
 
 echo -e "\n--------------------\nCopy config\n--------------------"
-cp -v configs/.zshrc ~/.zshrc
-cp -v configs/.vimrc ~/.vimrc
-cp -v configs/.p10k.zsh ~/.p10k.zsh
+chmod +x config-only.sh
+./config-only.sh
 echo "copy config done"
