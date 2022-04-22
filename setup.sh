@@ -38,7 +38,7 @@ sudo gem install colorls
 chsh $USER -s /bin/zsh
 
 # symlink all dotfiles
-rm ~/.zshrc
+rm ~/.zshrc ~/.vimrc ~/.p10k.zsh
 stow */
 
 echo "installation done"
