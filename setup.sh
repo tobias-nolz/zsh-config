@@ -1,6 +1,6 @@
 #!/bin/bash
 
-git config --global core.autocrlf true
+git config --global core.autocrlf false
 git config --global core.eol lf
 
 if [[ "$1" == "--help" ]];
