@@ -5,15 +5,15 @@ git config --global core.eol lf
 
 if [[ "$1" == "--help" ]];
 then
-  echo "Available Operating Systems: debian (default)"
+  echo "Available Operating Systems: ubuntu (default)"
   exit
 fi
 
-DISTRIBUTION=${1:-"debian"}
+DISTRIBUTION=${1:-"ubuntu"}
 
 # dependencies
 case $DISTRIBUTION in
-  debian)
+  ubuntu)
     sudo apt-get update
     sudo apt-get install -y curl stow zsh exa neovim dunst rofi awesome ruby-full
   ;;
