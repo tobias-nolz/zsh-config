@@ -65,4 +65,3 @@ To be added to `settings.json` accordingly.
 }
 ```
 
-
