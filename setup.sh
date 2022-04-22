@@ -15,7 +15,7 @@ DISTRIBUTION=${1:-"ubuntu"}
 case $DISTRIBUTION in
   ubuntu)
     sudo apt-get update
-    sudo apt-get install -y curl stow zsh exa neovim dunst rofi awesome ruby-full
+    sudo apt-get install -y curl stow zsh neovim dunst rofi awesome ruby-full
   ;;
 esac
 

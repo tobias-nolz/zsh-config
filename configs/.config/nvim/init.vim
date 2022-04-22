@@ -26,8 +26,8 @@ call plug#begin()
     Plug 'https://github.com/LnL7/vim-nix'
 call plug#end()
 
-source $HOME/.nvim/plugins/airline.vim
-source $HOME/.nvim/plugins/iceberg.vim
-source $HOME/.nvim/plugins/startify.vim
-source $HOME/.nvim/plugins/easymotion.vim
-source $HOME/.nvim/map.vim
+source $HOME/.config/nvim/plugins/airline.vim
+source $HOME/.config/nvim/plugins/iceberg.vim
+source $HOME/.config/nvim/plugins/startify.vim
+source $HOME/.config/nvim/plugins/easymotion.vim
+source $HOME/.config/nvim/map.vim
