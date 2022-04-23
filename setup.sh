@@ -24,7 +24,7 @@ esac
 sudo rm -rf $HOME/.oh-my-zsh
 
 # Oh My ZSH
-sh -c "$(curl -fsSL https://raw.github.com/robbyrussell/oh-my-zsh/master/tools/install.sh)"
+sh -c "$(curl -fsSL https://raw.github.com/robbyrussell/oh-my-zsh/master/tools/install.sh)" "" --unattended
 
 # Theme -> PowerLevel10K
 git clone https://github.com/romkatv/powerlevel10k.git $HOME/.oh-my-zsh/themes/powerlevel10k
@@ -35,10 +35,11 @@ git clone https://github.com/zsh-users/zsh-autosuggestions $HOME/.oh-my-zsh/plug
 sudo gem install colorls
 
 # Default shell zsh
-chsh $USER -s /bin/zsh
+sudo chsh $USER -s /bin/zsh
 
 # symlink all dotfiles
 rm ~/.zshrc ~/.vimrc ~/.p10k.zsh
 stow */
+exec /bin/zsh
 
 echo "installation done"
