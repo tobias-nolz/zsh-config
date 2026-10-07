@@ -1,0 +1,133 @@
+"$schema" = 'https://starship.rs/config-schema.json'
+
+# lean two-line prompt, iceberg colors
+add_newline = true
+palette = "iceberg"
+
+format = """
+$os\
+$directory\
+$git_branch\
+$git_state\
+$git_status\
+$fill\
+$status\
+$cmd_duration\
+$jobs\
+$nodejs\
+$python\
+$conda\
+$golang\
+$rust\
+${custom.cpu}\
+$memory_usage\
+$time
+$character"""
+
+[palettes.iceberg]
+fg = "#c6c8d1"
+comment = "#6b7089"
+blue = "#84a0c6"
+cyan = "#89b8c2"
+green = "#b4be82"
+orange = "#e2a478"
+purple = "#a093c7"
+red = "#e27878"
+
+[fill]
+symbol = " "
+
+[os]
+disabled = false
+style = "fg"
+format = "[$symbol]($style) "
+
+[os.symbols]
+Ubuntu = "\uf31b"
+Debian = "\uf306"
+Linux = "\uf17c"
+Windows = "\uf17a"
+Macos = "\uf179"
+
+[directory]
+style = "bold blue"
+truncation_length = 4
+truncation_symbol = "…/"
+read_only = " 󰌾"
+
+[git_branch]
+symbol = "\ue0a0 "
+style = "green"
+format = "[$symbol$branch(:$remote_branch)]($style) "
+
+[git_status]
+style = "orange"
+format = "([$all_status$ahead_behind]($style) )"
+
+[character]
+success_symbol = "[❯](green)"
+error_symbol = "[❯](red)"
+vimcmd_symbol = "[❮](green)"
+
+[status]
+disabled = false
+style = "red"
+format = "[✘ $status]($style) "
+
+[cmd_duration]
+min_time = 3_000
+style = "orange"
+format = "[\uf252 $duration]($style) "
+
+[jobs]
+style = "cyan"
+
+[nodejs]
+style = "green"
+format = "[$symbol($version)]($style) "
+
+[python]
+style = "cyan"
+format = '[${symbol}${pyenv_prefix}(${version})( \($virtualenv\))]($style) '
+
+[conda]
+style = "cyan"
+ignore_base = true
+format = "[$symbol$environment]($style) "
+
+[golang]
+style = "cyan"
+format = "[$symbol($version)]($style) "
+
+[rust]
+style = "orange"
+format = "[$symbol($version)]($style) "
+
+[custom.cpu]
+# CPU usage since the previous prompt, from /proc/stat deltas
+description = "CPU usage"
+when = true
+shell = ["sh"]
+style = "purple"
+format = "[ $output]($style) "
+command = """
+f="${XDG_RUNTIME_DIR:-/tmp}/starship-cpu-$(id -u)"
+read -r _ u n s i w q sq st _ < /proc/stat
+t=$((u+n+s+i+w+q+sq+st)); idle=$((i+w))
+pt=0; pi=0; [ -r "$f" ] && read -r pt pi < "$f"
+echo "$t $idle" > "$f"
+dt=$((t-pt)); di=$((idle-pi))
+[ "$dt" -gt 0 ] && echo "$(( 100*(dt-di)/dt ))%"
+"""
+
+[memory_usage]
+disabled = false
+threshold = -1
+style = "blue"
+format = "[\U000F035B $ram_pct]($style) "
+
+[time]
+disabled = false
+style = "comment"
+time_format = "%H:%M:%S"
+format = "[\uf017 $time]($style)"

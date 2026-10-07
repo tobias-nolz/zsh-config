@@ -1,0 +1,4 @@
+# only our own configs belong in the repo; anything else apps drop into ~/.config stays out
+configs/.config/*
+!configs/.config/nvim/
+!configs/.config/starship.toml

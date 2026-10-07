@@ -1,10 +1,34 @@
-# ZSH installation with plugins and config
-Afer executing the `setup.sh` file, the installation script will start executing.
-Once in the zsh prompt, type `exit` to continue the installation.
+# zsh-config
+Dotfiles for a zsh + Neovim console on Ubuntu / WSL, linked into `$HOME` with GNU stow.
+
+## Installation
+```sh
+./setup.sh
+```
+The script is safe to re-run. It installs the packages, links `configs/` into `$HOME`, makes zsh the default shell and installs the Neovim plugins. Existing dotfiles that are in the way are moved to `~/.dotfiles-backup-<date>/`.
+
+## What's included
+| Tool | Purpose |
+| --- | --- |
+| [antidote](https://github.com/mattmc3/antidote) | zsh plugins (`configs/.zsh/plugins.txt`): fzf-tab, autosuggestions, syntax highlighting, oh-my-zsh git aliases |
+| [starship](https://starship.rs) | prompt (`configs/.config/starship.toml`) |
+| [eza](https://eza.rocks) | `ls`, `ll`, `la`, `lla`, `lt` |
+| [fzf](https://github.com/junegunn/fzf) | `Ctrl-R` history, `Ctrl-T` files, `Alt-C` dirs, fuzzy tab completion |
+| [zoxide](https://github.com/ajeetdsouza/zoxide) | `z <dir>` / `zi` |
+| bat, fd, ripgrep, delta | modern `cat`, `find`, `grep`, `git diff` |
+| Neovim + [lazy.nvim](https://lazy.folke.io) | `configs/.config/nvim`, native LSP via mason, blink.cmp, treesitter, snacks.nvim |
+
+## Machine-specific settings
+Anything that only applies to one machine (conda/mamba init, extra `PATH` entries, tool completions) goes into `~/.zshrc.local`. That file is sourced at the end of `.zshrc` and is not tracked. If a tool's installer appends to `~/.zshrc`, move those lines over to `~/.zshrc.local`.
 
 ## Windows Terminal Configuration
 ### Font
-FiraMono Nerd Font: [Download](https://github.com/ryanoasis/nerd-fonts/releases/download/v2.1.0/FiraMono.zip)
+The prompt and Neovim icons need a **Nerd Font v3** (v2 fonts such as "FiraMono NF … Windows Compatible" show `?` for some icons). Either of these works:
+
+- FiraMono Nerd Font: [Download](https://github.com/ryanoasis/nerd-fonts/releases/latest/download/FiraMono.zip) (face name `FiraMono Nerd Font`)
+- FiraCode Nerd Font, with ligatures: [Download](https://github.com/ryanoasis/nerd-fonts/releases/latest/download/FiraCode.zip) (face name `FiraCode Nerd Font`)
+
+Install the `.ttf`/`.otf` files (right-click → Install), set the face name below, and restart Windows Terminal.
 
 ### Profile Configuration
 To be added to `settings.json` accordingly.

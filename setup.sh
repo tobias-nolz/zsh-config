@@ -1,51 +1,81 @@
-#!/bin/bash
+#!/usr/bin/env bash
+set -euo pipefail
 
-git config --global core.autocrlf false
-git config --global core.eol lf
+cd "$(dirname "$(readlink -f "$0")")"
 
-if [[ "$1" == "--help" ]];
-then
-  echo "Available Operating Systems: ubuntu (default)"
+if [[ "${1:-}" == "--help" ]]; then
+  echo "usage: $0 [distribution]"
+  echo "Available distributions: ubuntu (default)"
   exit
 fi
 
 DISTRIBUTION=${1:-"ubuntu"}
 
+git config --global core.autocrlf false
+git config --global core.eol lf
+
 # dependencies
 case $DISTRIBUTION in
   ubuntu)
     sudo apt-get update
-    sudo apt-get install -y curl stow zsh neovim dunst rofi awesome ruby-full
+    sudo apt-get install -y \
+      zsh stow git curl unzip build-essential \
+      neovim \
+      eza bat fd-find ripgrep fzf zoxide starship git-delta shellcheck
+  ;;
+  *)
+    echo "unsupported distribution: $DISTRIBUTION" >&2
+    exit 1
   ;;
 esac
 
+# Debian/Ubuntu ship bat and fd under different names
+mkdir -p "$HOME/.local/bin"
+command -v batcat >/dev/null && ln -sf "$(command -v batcat)" "$HOME/.local/bin/bat"
+command -v fdfind >/dev/null && ln -sf "$(command -v fdfind)" "$HOME/.local/bin/fd"
 
-# Cleanup
-sudo rm -rf $HOME/.oh-my-zsh
+# delta as git pager
+if command -v delta >/dev/null; then
+  git config --global core.pager delta
+  git config --global interactive.diffFilter "delta --color-only"
+  git config --global delta.navigate true
+  git config --global merge.conflictStyle zdiff3
+fi
 
-# Oh My ZSH
-sh -c "$(curl -fsSL https://raw.github.com/robbyrussell/oh-my-zsh/master/tools/install.sh)" "" --unattended
+# zsh plugin manager
+if [[ ! -d "$HOME/.antidote" ]]; then
+  git clone --depth=1 https://github.com/mattmc3/antidote.git "$HOME/.antidote"
+fi
 
-# Theme -> PowerLevel10K
-git clone https://github.com/romkatv/powerlevel10k.git $HOME/.oh-my-zsh/themes/powerlevel10k
+# default shell zsh
+if [[ "$(getent passwd "$USER" | cut -d: -f7)" != "$(command -v zsh)" ]]; then
+  sudo chsh -s "$(command -v zsh)" "$USER"
+fi
 
-# Plugins
-git clone https://github.com/zsh-users/zsh-syntax-highlighting.git $HOME/.oh-my-zsh/plugins/zsh-syntax-highlighting
-git clone https://github.com/zsh-users/zsh-autosuggestions $HOME/.oh-my-zsh/plugins/zsh-autosuggestions
-sudo gem install colorls
+# back up real (non-symlink) dotfiles that would conflict with stow
+backup="$HOME/.dotfiles-backup-$(date +%Y%m%d-%H%M%S)"
+for f in .zshrc .zsh .config/nvim .config/starship.toml; do
+  if [[ -e "$HOME/$f" && ! -L "$HOME/$f" ]]; then
+    mkdir -p "$backup/$(dirname "$f")"
+    mv "$HOME/$f" "$backup/$f"
+    echo "backed up ~/$f to $backup/$f"
+  fi
+done
 
-# Default shell zsh
-sudo chsh $USER -s /bin/zsh
+# leftover from the powerlevel10k setup
+[[ -L "$HOME/.p10k.zsh" ]] && rm "$HOME/.p10k.zsh"
 
-# symlink all dotfiles
-rm ~/.zshrc ~/.vimrc ~/.p10k.zsh
-stow */
+# symlink all dotfiles; ~/.config must be a real directory so stow
+# links only our entries instead of folding the whole directory
+mkdir -p "$HOME/.config"
+stow --restow --target="$HOME" configs
 
-sh -c 'curl -fLo "${XDG_DATA_HOME:-$HOME/.local/share}"/nvim/site/autoload/plug.vim --create-dirs \
-       https://raw.githubusercontent.com/junegunn/vim-plug/master/plug.vim'
-
-nvim --headless +PlugInstall +qall
-
-exec /bin/zsh
+# neovim plugins
+nvim --headless "+Lazy! sync" +qa
 
 echo "installation done"
+if [[ -d "$HOME/.oh-my-zsh" ]]; then
+  echo "note: ~/.oh-my-zsh is no longer used and can be removed"
+fi
+
+exec zsh
